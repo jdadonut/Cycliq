@@ -7,7 +7,7 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using Microsoft.Extensions.Configuration;
-
+using System.Net.Http;
 namespace Cycliq
 {
     internal class Program
@@ -54,7 +54,14 @@ namespace Cycliq
                 Dependencies = deps
             });
             // TODO: Add commands
-
+            var type = typeof(IModule);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(p => type.IsAssignableFrom(p) && !p.IsInterface);
+            var typeList = types as Type[] ?? types.ToArray();
+            foreach (var t in typeList)
+                __commands.RegisterCommands(t);
+            Console.WriteLine($"[Cycliq] Loaded {typeList.Count()} modules.");
             RunAsync(args).Wait();
         }
         async Task RunAsync(string[] args)
@@ -73,6 +80,7 @@ namespace Cycliq
             deps.AddInstance(__interactivity)
                 .AddInstance(__ctoken)
                 .AddInstance(__config)
+                .AddInstance<HttpClient>(new HttpClient())
                 .AddInstance(__discord);
             return deps.Build();
         }
