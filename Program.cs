@@ -30,13 +30,51 @@ namespace Cycliq
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .Build();
 
+            if (__config.GetValue<string>("discord:token") == "")
+            {
+                throw new Exception("Token is equatable to nothing.");
+            }
             Console.WriteLine("[INIT] Creating Discord Client");
             __discord = new DiscordClient(new DiscordConfiguration
             {
                 Token = __config.GetValue<string>("discord:token"),
                 TokenType = TokenType.Bot
             });
+
+            __interactivity = __discord.UseInteractivity(new InteractivityConfiguration()
+            {
+                PaginationBehaviour = TimeoutBehaviour.Delete,
+                PaginationTimeout = TimeSpan.FromSeconds(30),
+                Timeout = TimeSpan.FromSeconds(30)
+            });
+            var deps = BuildDeps();
+            __commands = __discord.UseCommandsNext(new CommandsNextConfiguration
+            {
+                StringPrefix = __config.GetValue<string>("discord:CommandPrefix"),
+                Dependencies = deps
+            });
+            // TODO: Add commands
+
+            RunAsync(args).Wait();
+        }
+        async Task RunAsync(string[] args)
+        {
+            Console.WriteLine("[Cycliq] Connecting...");
+            await __discord.ConnectAsync();
+            Console.WriteLine("[Cycliq] Connected!");
+
+            while (!__ctoken.IsCancellationRequested)
+                await Task.Delay(TimeSpan.FromMinutes(1));
             
+        }
+        private DependencyCollection BuildDeps()
+        {
+            using var deps = new DependencyCollectionBuilder();
+            deps.AddInstance(__interactivity)
+                .AddInstance(__ctoken)
+                .AddInstance(__config)
+                .AddInstance(__discord);
+            return deps.Build();
         }
     }
 }
