@@ -23,12 +23,6 @@ jobs:
             target: osx-x64
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@master
-      - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: anothrNick
       - name: Checkout
         uses: actions/checkout@v1
 
