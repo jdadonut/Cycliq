@@ -53,7 +53,6 @@ namespace Cycliq
                 StringPrefix = __config.GetValue<string>("discord:CommandPrefix"),
                 Dependencies = deps
             });
-            // TODO: Add commands
             var type = typeof(IModule);
             var types = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(s => s.GetTypes())
