@@ -63,7 +63,7 @@ namespace Cycliq
             }
             catch (Exception e)
             {
-                await ctx.RespondAsync("An error occurred, it was logged.")
+                await ctx.RespondAsync("An error occurred, it was logged.");
             }
         }
 
