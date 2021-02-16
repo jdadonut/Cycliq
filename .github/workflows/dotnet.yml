@@ -1,14 +1,10 @@
 name: .NET
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: push
 jobs:
   release:
     if: always()
-    needs: build
+    needs: verUp
     name: Release
     strategy:
       matrix:
@@ -55,7 +51,7 @@ jobs:
           files: "Cycliq*"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  build:
+  verUp:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
