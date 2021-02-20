@@ -3,8 +3,8 @@
     "token": "DiscordBotToken",
     "appId": "ApplicationId",
     "appSecret": "ApplicationSecret",
-    "CommandPrefix": "cq!",
-    "owner": ""
+    "CommandPrefix": "cq!"
+
   },
   "mongo": {
     "url": ""

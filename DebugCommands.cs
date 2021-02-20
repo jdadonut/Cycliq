@@ -47,6 +47,25 @@ namespace Cycliq
                 await Task.Delay(1000);
                 await ctx.RespondAsync("no?");
             }
+            [Group("sample")]
+            class cycliq_get_sample : BaseCommandModule
+            {
+                [Command("nekos.life")]
+                [RequireOwner]
+                [Description("Sample a nekos.life endpoint. **DEBUG COMMAND**")]
+                public async Task Sample(CommandContext ctx, string endp)
+                {
+                    await ctx.TriggerTypingAsync();
+                    DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+                    emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, endp));
+                    await ctx.RespondAsync(embed: emb);
+
+                }
+
+            }
+
+
+
 
         }
 
