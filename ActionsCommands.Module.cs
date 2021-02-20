@@ -10,111 +10,123 @@ using Newtonsoft.Json;
 
 namespace Cycliq
 {
-    class ActionsCommands : IModule
+    [Group("do")]
+    class ActionsCommands : BaseCommandModule
     {
-        string NekosLifeApiPoint = "https://nekos.life/api/v2/img";
+
+
 
         [Command("hug")]
         [Description("Hug someone!")]
         public async Task Hug(CommandContext ctx, string mention)
         {
-            Console.WriteLine("[Cycliq] Command \"Hug\" running...");
             await ctx.TriggerTypingAsync();
-            while (true)
-            {
-                if (!new Regex("(<@|<@!)[0-9]{1,30}>").IsMatch(mention))
-                {
-                    await ctx.RespondAsync($"{mention} isn't a valid tag! Send a valid tag to hug that person!");
-                    var message = await ctx.Client.GetInteractivityModule().WaitForMessageAsync(
-                        c => c.Author.Id == ctx.Message.Author.Id,
-                        TimeSpan.FromSeconds(15));
-                    if (message == null || message.Message.Content.ToLower() == "cancel")
-                    {
-                        await ctx.RespondAsync("Command Cancelled.");
-                        return;
-                    }
-                    else
-                        mention = message.Message.Content;
-
-                }
-                else
-                    break;
-            }
-
-            try
-            {
-                var Embed = new DiscordEmbedBuilder();
-                Embed.ImageUrl = ((Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(
-                    (await
-                        (await
-                            ctx.Dependencies.GetDependency<HttpClient>()
-                                .GetAsync(NekosLifeApiPoint + "/hug"))
-                                    .Content
-                                        .ReadAsStringAsync()
-                            )
-                        )
-                    ).Value<string>("url");
-                Embed.Description = $"<@{ctx.Message.Author.Id}> hugged {mention}";
-                await ctx.RespondAsync(embed: Embed);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                await ctx.RespondAsync("Command errored out, error logged.");
-            }
-
-            return;
+            if (!Tools.IsMention(mention))
+                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to hug!");
+            if (mention == ctx.Message.Author.Id.ToString())
+                return;
+            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "hug"))
+                .WithDescription($"<@!{ctx.Message.Author.Id}> hugged {mention}");
+            await ctx.RespondAsync(embed: emb);
 
         }
         [Command("kiss")]
         [Description("Kiss someone!")]
         public async Task Kiss(CommandContext ctx, string mention)
         {
-            Console.WriteLine("[Cycliq] Command \"Kiss\" running...");
             await ctx.TriggerTypingAsync();
-            while (true)
-            {
-                if (!new Regex("(<@|<@!)[0-9]{1,30}>").IsMatch(mention))
-                {
-                    await ctx.RespondAsync($"{mention} isn't a valid tag! Send a valid tag to kiss that person!");
-                    var message = await ctx.Client.GetInteractivityModule().WaitForMessageAsync(
-                        c => c.Author.Id == ctx.Message.Author.Id,
-                        TimeSpan.FromSeconds(15));
-                    if (message == null || message.Message.Content.ToLower() == "cancel")
-                    {
-                        await ctx.RespondAsync("Command Cancelled.");
-                        return;
-                    }
-                    else
-                        mention = message.Message.Content;
+            if (!Tools.IsMention(mention))
+                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to kiss!");
+            if (mention == ctx.Message.Author.Id.ToString())
+                return;
+            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "kiss"))
+                .WithDescription($"<@!{ctx.Message.Author.Id}> kissed {mention}");
+            await ctx.RespondAsync(embed: emb);
 
-                }
-                else
-                    break;
+
+        }
+        [Command("cuddle")]
+        [Description("Cuddle someone!")]
+        public async Task Cuddle(CommandContext ctx, string mention)
+        {
+            await ctx.TriggerTypingAsync();
+            if (!Tools.IsMention(mention))
+                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to cuddle!");
+            if (mention == ctx.Message.Author.Id.ToString())
+                return;
+            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "cuddle"))
+                .WithDescription($"<@!{ctx.Message.Author.Id}> is cuddling with {mention}");
+            await ctx.RespondAsync(embed: emb);
+
+
+        }
+        [Command("poke")]
+        [Description("Poke someone!")]
+        public async Task Poke(CommandContext ctx, string mention)
+        {
+            await ctx.TriggerTypingAsync();
+            if (!Tools.IsMention(mention))
+                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to poke!");
+            if (mention == ctx.Message.Author.Id.ToString())
+                return;
+            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "poke"))
+                .WithDescription($"<@!{ctx.Message.Author.Id}> poked {mention}");
+            await ctx.RespondAsync(embed: emb);
+
+
+        }
+
+    }
+    [Group("show")]
+    class ShowCommands : BaseCommandModule
+    {
+        [Group("feet")]
+        
+        class ShowCommands_feet : BaseCommandModule
+        {
+
+            [Command("ero")]
+            [Description("erotic feet image")]
+            [RequireNsfw]
+            [Aliases("erotic", "nsfw")]
+            public async Task FeetSFW(CommandContext ctx)
+            {
+                await ctx.TriggerTypingAsync();
+                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "feet"));
+                await ctx.RespondAsync(embed: emb);
+
             }
 
-            try
+            [Command("sfw")]
+            [Description("sfw feet image")]
+            [GroupCommand]
+            public async Task FeetERO(CommandContext ctx)
             {
-                var Embed = new DiscordEmbedBuilder();
-                Embed.ImageUrl = ((Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject((await (await ctx.Dependencies.GetDependency<HttpClient>().GetAsync(NekosLifeApiPoint + "/kiss")).Content.ReadAsStringAsync()))).Value<string>("url");
-                Embed.Description = $"<@{ctx.Message.Author.Id}> kissed {mention}";
-                await ctx.RespondAsync(embed: Embed);
+                await ctx.TriggerTypingAsync();
+                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "erofeet"));
+                await ctx.RespondAsync(embed: emb);
+
             }
-            catch (Exception e)
+            public async Task Feet(CommandContext ctx)
             {
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                await ctx.RespondAsync("Command errored out, error logged.");
+                await ctx.TriggerTypingAsync();
+                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "feet"));
+                await ctx.RespondAsync(embed: emb);
+
             }
-
-            return;
-
         }
     }
 }
 
 public class NekosLifeApiResponse : Newtonsoft.Json.Linq.JObject
 {
+    [JsonProperty("url")]
     public string url { get; set; }
 }

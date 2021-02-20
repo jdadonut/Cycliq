@@ -9,70 +9,53 @@ using System.Net.Http;
 using Newtonsoft.Json;
 namespace Cycliq
 {
-    class ModerationCommands : IModule
+    class ModerationCommands : BaseCommandModule
     {
         [Command("ban")]
         [Description("bans a user")]
         [RequirePermissions(DSharpPlus.Permissions.BanMembers)]
         [RequireUserPermissions(DSharpPlus.Permissions.BanMembers)]
-        public async Task Ban(CommandContext ctx, string mention,[RemainingText]string reason)
+        public async Task Ban(CommandContext ctx, DiscordUser usr, [RemainingText] string reason)
         {
             await ctx.RespondAsync("This command is not implemented yet.");
             return;
+            /*
             await ctx.TriggerTypingAsync();
 
-            // Extract UID from string mention
-            while (true)
+            await ctx.RespondAsync("An error occurred, it was logged.");
+
+            int BanningPosition = 9999;
+            int ModPosition = 9999;
+            foreach (DiscordRole x in usr.Roles)
+                if (x.Position > BanningPosition)
+                    BanningPosition = x.Position;
+            foreach (DiscordRole x in (await ctx.Guild.GetMemberAsync(ctx.Message.Author.Id)).Roles)
+                if (x.Position > ModPosition)
+                    ModPosition = x.Position;
+            if (BanningPosition > ModPosition)
             {
-                if (!new Regex("(<@|<@!)?[0-9]{1,30}>?").IsMatch(mention))
+                try
                 {
-                    #pragma warning disable CS4014 
-                    awaitdel(await ctx.RespondAsync($"{mention} isn't a valid tag! Send a valid tag to ban that person!"), 16000);
-                    #pragma warning restore CS4014 
-                    var message = await ctx.Client.GetInteractivityModule().WaitForMessageAsync(
-                        c => c.Author.Id == ctx.Message.Author.Id,
-                        TimeSpan.FromSeconds(15));
-                    if (message == null || message.Message.Content.ToLower() == "cancel")
-                    {
-                        await ctx.RespondAsync("Command Cancelled.");
-                        return;
-                    }
-                    else
-                        mention = message.Message.Content;
-
+                    await usr.BanAsync(reason: reason);
+                    await ctx.RespondAsync(embed: new DiscordEmbedBuilder().WithAuthor(ctx.Message.Author.Username, iconUrl: ctx.Message.Author.AvatarUrl).AddField("User Banned", usr.Username, true).AddField("Moderator", ctx.Message.Author.Username, false).WithImageUrl(usr.AvatarUrl).AddField("Ban Reason", reason));
                 }
-                else
-                    break;
+                catch (Exception e)
+                {
+                    await ctx.RespondAsync("This bot likely doesnt have the power to ban that person!");
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(e.StackTrace);
+                }
 
+            */
             }
-            if (mention.StartsWith("<@!"))
-                mention = mention.Substring(2);
-            if (mention.StartsWith("<@"))
-                mention = mention.Substring(1);
-            if (mention.EndsWith(">"))
-                mention.Remove(mention.Length - 1);
-            // {mention} now either
-            // a) can be flashed to an int
-            // b) is not a user mention.
-            try { int.Parse(mention); } catch (Exception e) { await ctx.RespondAsync("Probably not a valid mention"); return; }
-            DiscordMember? usr = await ctx.Guild.GetMemberAsync((ulong)int.Parse(mention));
-            try
+
+            async Task awaitdel(DiscordMessage discordMessage, int ms)
             {
-                if (usr == null)
-                    await ctx.Guild.BanMemberAsync((ulong)int.Parse(mention), 0, reason);
-            }
-            catch (Exception e)
-            {
-                await ctx.RespondAsync("An error occurred, it was logged.");
-            }
-        }
+                await Task.Delay(ms);
+                try { await discordMessage.DeleteAsync(); }
+                catch (Exception e) { Console.WriteLine($"Deleting message with ID {discordMessage.Id} failed. Reason: {e.Message}"); }
 
-        private async Task awaitdel(DiscordMessage discordMessage, int ms)
-        {
-            await Task.Delay(ms);
-            try { await discordMessage.DeleteAsync(); } 
-            catch (Exception e) { Console.WriteLine($"Deleting message with ID {discordMessage.Id} failed. Reason: {e.Message}"); }
-
+            }
         }
     }
-}
+
