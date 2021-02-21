@@ -19,7 +19,7 @@ namespace Cycliq
         {
             Console.WriteLine("[Cycliq] | Command \"Invite\" running...");
             await ctx.TriggerTypingAsync();
-            await ctx.RespondAsync("<https://discord.com/oauth2/authorize?client_id=810337342283579422&scope=bot&permissions=8>");
+            await ctx.RespondAsync($"<https://discord.com/oauth2/authorize?client_id={ctx.Client.CurrentUser.Id}&scope=bot&permissions=8>");
         }
         [Command("eval")]
         [Description("Evaluate code")]

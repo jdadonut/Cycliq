@@ -54,6 +54,35 @@ public static class Tools
 
 
     }
+    public static async Task DoNekosLifeCommand(CommandContext ctx, string endpoint)
+    {
+        await ctx.TriggerTypingAsync();
+        DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+        emb.WithImageUrl(await GetNekosLifeEndpoint(ctx, "blowjob"));
+        await ctx.RespondAsync(embed: emb);
+    }
+    public static async Task DoActionCommand(CommandContext ctx, string endpoint, string action, string append, string mention)
+    {
+        await ctx.TriggerTypingAsync();
+        if (!Tools.IsMention(mention))
+            mention = await Tools.GetMention(ctx, mention, $"Please mention the user you want to {action}!");
+        if (mention == ctx.Message.Author.Id.ToString())
+            return;
+        DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+        emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, endpoint))
+            .WithDescription($"<@!{ctx.Message.Author.Id}> {action}{append} {mention}");
+        await ctx.RespondAsync(embed: emb);
+
+    }
+    public static async Task DoSelfActionCommand(CommandContext ctx, string endpoint, string message)
+    {
+        await ctx.TriggerTypingAsync();
+        DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
+        emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, endpoint))
+            .WithDescription($"<@!{ctx.Message.Author.Id}> {message}!");
+        await ctx.RespondAsync(embed: emb);
+
+    }
 
 
 }

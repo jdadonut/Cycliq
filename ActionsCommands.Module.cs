@@ -7,267 +7,94 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Net.Http;
 using Newtonsoft.Json;
-
+using DSharpPlus;
 namespace Cycliq
 {
     [Group("do")]
     class ActionsCommands : BaseCommandModule
     {
-
-
-
-        [Command("hug")]
-        [Description("Hug someone!")]
-        public async Task Hug(CommandContext ctx, string mention)
-        {
-            await ctx.TriggerTypingAsync();
-            if (!Tools.IsMention(mention))
-                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to hug!");
-            if (mention == ctx.Message.Author.Id.ToString())
-                return;
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "hug"))
-                .WithDescription($"<@!{ctx.Message.Author.Id}> hugged {mention}");
-            await ctx.RespondAsync(embed: emb);
-
-        }
-        [Command("kiss")]
-        [Description("Kiss someone!")]
-        public async Task Kiss(CommandContext ctx, string mention)
-        {
-            await ctx.TriggerTypingAsync();
-            if (!Tools.IsMention(mention))
-                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to kiss!");
-            if (mention == ctx.Message.Author.Id.ToString())
-                return;
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "kiss"))
-                .WithDescription($"<@!{ctx.Message.Author.Id}> kissed {mention}");
-            await ctx.RespondAsync(embed: emb);
-
-
-        }
-        [Command("cuddle")]
-        [Description("Cuddle someone!")]
-        public async Task Cuddle(CommandContext ctx, string mention)
-        {
-            await ctx.TriggerTypingAsync();
-            if (!Tools.IsMention(mention))
-                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to cuddle!");
-            if (mention == ctx.Message.Author.Id.ToString())
-                return;
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "cuddle"))
-                .WithDescription($"<@!{ctx.Message.Author.Id}> is cuddling with {mention}");
-            await ctx.RespondAsync(embed: emb);
-
-
-        }
-        [Command("poke")]
-        [Description("Poke someone!")]
-        public async Task Poke(CommandContext ctx, string mention)
-        {
-            await ctx.TriggerTypingAsync();
-            if (!Tools.IsMention(mention))
-                mention = await Tools.GetMention(ctx, mention, "Please mention the user you want to poke!");
-            if (mention == ctx.Message.Author.Id.ToString())
-                return;
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "poke"))
-                .WithDescription($"<@!{ctx.Message.Author.Id}> poked {mention}");
-            await ctx.RespondAsync(embed: emb);
-
-
-        }
+        [Command("hug"), Description("Hug someone!")]                                                          // [USES] nekos.life => hug
+        public async Task Hug(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "hug", "hug", "ed", mention); }
+        [Command("kiss"), Description("Kiss someone!")]                                                        // [USES] nekos.life => kiss
+        public async Task Kiss(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "kiss", "kiss", "es", mention); }
+        [Command("cuddle"), Description("Cuddle someone!")]                                                    // [USES] nekos.life => cuddle
+        public async Task Cuddle(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "cuddle", "cuddle", "ed", mention); }
+        [Command("poke"), Description("Poke someone!")]                                                        // [USES] nekos.life => poke
+        public async Task Poke(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "poke", "poke", "ed", mention); }
+        [Command("tickle"), Description("Tickle someone!")]                                                        // [USES] nekos.life => poke
+        public async Task Tickle(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "tickle", "tickl", "ed", mention); }
+        [Command("feed"), Description("Feed someone!")]                                                        // [USES] nekos.life => poke
+        public async Task Feed(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "feed", "fed", "", mention); }
+        [Command("baka"), Description("baka!")]                                                        // [USES] nekos.life => poke
+        public async Task Baka(CommandContext ctx) { await Tools.DoSelfActionCommand(ctx, "baka", ": \"B-Baka...\""); }
 
     }
     [Group("show")]
     class ShowCommands : BaseCommandModule
     {
         [Group("feet")]
-
         class ShowCommands_feet : BaseCommandModule
         {
-
-            [Command("ero")]
-            [Description("erotic feet image")]
-            [RequireNsfw]
-            [Aliases("erotic", "nsfw")]
-            public async Task FeetSFW(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "feet"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-
-            [Command("sfw")]
-            [Description("sfw feet image")]
-            [GroupCommand]
-            public async Task FeetERO(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "erofeet"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-
+            [Command("ero"), Description("erotic feet image"), RequireNsfw, Aliases("erotic")]                  // [USES] nekos.life => feet
+            public async Task FeetSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "feet"); } 
+            [Command("sfw"), Description("sfw feet image"), GroupCommand]                                       // [USES] nekos.life => erofeet
+            public async Task FeetERO(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "erofeet"); } 
+            [Command("nsfw"), Description("nsfw feet image"), RequireNsfw]                                      // [USES] nekos.life => feetg
+            public async Task FeetNSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "feetg"); } 
         }
-        [Group("holo")]
-        [Aliases("hololive", "vtuber", "vtube", "vtb")]
-
+        [Group("holo"), Aliases("hololive", "vtuber", "vtube", "vtb")]
         class ShowCommands_holo : BaseCommandModule
         {
-
-            [Command("ero")]
-            [Description("erotic holo image")]
-            [RequireNsfw]
-            [Aliases("erotic")]
-            public async Task HoloERO(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "holoero"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-
-            [Command("sfw")]
-            [Description("sfw holo image")]
-            [GroupCommand]
-            public async Task HoloSFW(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "holo"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-            [Command("nsfw")]
-            [Description("nsfw holo image")]
-            [Aliases("lewd", "ns", "porn")]
-            [RequireNsfw]
-            public async Task HoloNSFW(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "hololewd"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-
-
+            [Command("ero"), Description("erotic holo image"), RequireNsfw, Aliases("erotic")]                   // [USES] nekos.life => holoero
+            public async Task HoloERO(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "holoero"); } 
+            [Command("sfw"), Description("sfw holo image"), GroupCommand]                                        // [USES] nekos.life => holo
+            public async Task HoloSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "holo"); } 
+            [Command("nsfw"), Description("nsfw holo image"), Aliases("lewd", "ns", "porn"), RequireNsfw]        // [USES] nekos.life => hololewd
+            public async Task HoloNSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "hololewd"); } 
         }
-        [Group("yuri")]
-        [Aliases("wlw", "2girls")]
-
-        class ShowCommands_yurl : BaseCommandModule
+        [Group("yuri"), Aliases("wlw", "2girls")]
+        class ShowCommands_yuri : BaseCommandModule
         {
-
-
-            [Command("ero")]
-            [Description("erotic yuri image")]
-            [Aliases("sfw")]
-            [GroupCommand]
-            public async Task YuriSFW(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "eroyuri"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-            [Command("nsfw")]
-            [Description("nsfw yuri image")]
-            [Aliases("lewd", "ns", "porn")]
-            [RequireNsfw]
-            public async Task YuriNSFW(CommandContext ctx)
-            {
-                await ctx.TriggerTypingAsync();
-                DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-                emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "yuri"));
-                await ctx.RespondAsync(embed: emb);
-
-            }
-
-
+            [Command("ero"), Description("erotic yuri image"), Aliases("sfw"), GroupCommand]                     // [USES] nekos.life => eroyuri
+            public async Task YuriSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "eroyuri"); }
+            [Command("nsfw"), Description("nsfw yuri image"), Aliases("lewd", "ns", "porn"), RequireNsfw]        // [USES] nekos.life => yuri
+            public async Task YuriNSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "yuri"); }      
         }
-
+        [Group("animalgirl"), Aliases("kemonomimi", "kemo")]
+        class ShowCommands_kemonomimi : BaseCommandModule
+        {
+            [Command("ero"), Description("erotic kemonomimi image"), RequireNsfw, Aliases("erotic")]             // [USES] nekos.life => erok, erokemo
+            public async Task HoloERO(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "erok"); }
+            [Command("sfw"), Description("sfw kemonomimi image"), GroupCommand]                                  // [USES] nekos.life => kemo, kemonomimi
+            public async Task HoloSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "kemonomimi"); }
+            [Command("nsfw"), Description("nsfw kemonomimi image"), Aliases("lewd", "ns", "porn"), RequireNsfw]  // [USES] nekos.life => lewdkemo, lewdk
+            public async Task HoloNSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "lewdkemo"); }
+        }
+        [Group("catgirl"), Aliases("neko")]
+        class ShowCommands_neko : BaseCommandModule
+        {
+            [Command("sfw"), Description("sfw catgirl images"), GroupCommand]                                     // [USES] nekos.life => neko
+            public async Task NekoSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "neko"); }
+            [Command("nsfw"), Description("nsfw catgirl images"), RequireNsfw]                                    // [USES] nekos.life => nsfw_neko_gif
+            public async Task NekoNSFW(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "nsfw_neko_gif"); }
+        }
         // ! ONE-OFF COMMANDS BELOW
-
-        [Command("futa")]
-        [RequireNsfw]
-        [Aliases("futanari")]
-        [Description("nsfw futanari pictures")]
-        public async Task Futa(CommandContext ctx)
-        {
-            await ctx.TriggerTypingAsync();
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "futanari"));
-            await ctx.RespondAsync(embed: emb);
-
-        }
-        [Command("smallboobs")]
-        [RequireNsfw]
-        [Aliases("flat", "smalltits")]
-        [Description("nsfw flat pictures")]
-        public async Task Flat(CommandContext ctx)
-        {
-            await ctx.TriggerTypingAsync();
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "smallboobs"));
-            await ctx.RespondAsync(embed: emb);
-
-        }
-        [Command("femboy")]
-        [RequireNsfw]
-        [Aliases("trap")]
-        [Description("nsfw femboy pictures")]
-        public async Task Femboy(CommandContext ctx)
-        {
-            await ctx.TriggerTypingAsync();
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "trap"));
-            await ctx.RespondAsync(embed: emb);
-
-        }
-        [Command("goose")]
-        [Description("goose pictures")]
-        public async Task Goose(CommandContext ctx)
-        {
-            await ctx.TriggerTypingAsync();
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "goose"));
-            await ctx.RespondAsync(embed: emb);
-
-        }
-
-        [Command("boobs")]
-        [RequireNsfw]
-        [Aliases("tits", "honkers")]
-        [Description("nsfw boobs pictures")]
-        public async Task Boobs(CommandContext ctx)
-        {
-            await ctx.TriggerTypingAsync();
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "boobs"));
-            await ctx.RespondAsync(embed: emb);
-
-        }
-
-        [Command("blowjob")]
-        [RequireNsfw]
-        [Description("nsfw blowjob pictures")]
-        public async Task Blowjob(CommandContext ctx)
-        {
-            await ctx.TriggerTypingAsync();
-            DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-            emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, "blowjob"));
-            await ctx.RespondAsync(embed: emb);
-
-        }
+        [Command("futa"), RequireNsfw, Aliases("futanari"), Description("nsfw futanari pictures")]               // [USES] nekos.life => futanari
+        public async Task Futa(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "futanari"); }
+        [Command("smallboobs"), RequireNsfw, Aliases("flat", "smalltits"), Description("nsfw flat pictures")]    // [USES] nekos.life => smallboobs
+        public async Task Flat(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "smallboobs"); }
+        [Command("femboy"), RequireNsfw, Aliases("trap"), Description("nsfw femboy pictures")]                   // [USES] nekos.life => trap
+        public async Task Femboy(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "trap"); }
+        [Command("goose"), Description("goose pictures")]                                                        // [USES] nekos.life => goose
+        public async Task Goose(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "goose"); }
+        [Command("boobs"), RequireNsfw, Aliases("tits", "honkers"), Description("nsfw boobs pictures")]          // [USES] nekos.life => boobs
+        public async Task Boobs(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "boobs"); }
+        [Command("blowjob"), RequireNsfw, Description("nsfw blowjob pictures")]                                  // [USES] nekos.life => blowjob, bj
+        public async Task Blowjob(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "bj"); }
+        [Command("cat"), Description("meow!")]                                                                  // [USES] nekos.life => meow
+        public async Task Meow(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "meow"); }
+        [Command("lizard"), Description("lizard!")]                                                             // [USES] nekos.life => lizard
+        public async Task Lizard(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "lizard"); }
 
     }
 }
