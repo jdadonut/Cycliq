@@ -14,11 +14,11 @@ namespace Cycliq
     class ActionsCommands : BaseCommandModule
     {
         [Command("hug"), Description("Hug someone!")]                                                          // [USES] nekos.life => hug
-        public async Task Hug(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "hug", "hug", "ed", mention); }
+        public async Task Hug(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "hug", "hug", "ged", mention); }
         [Command("kiss"), Description("Kiss someone!")]                                                        // [USES] nekos.life => kiss
-        public async Task Kiss(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "kiss", "kiss", "es", mention); }
+        public async Task Kiss(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "kiss", "kiss", "ed", mention); }
         [Command("cuddle"), Description("Cuddle someone!")]                                                    // [USES] nekos.life => cuddle
-        public async Task Cuddle(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "cuddle", "cuddle", "ed", mention); }
+        public async Task Cuddle(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "cuddle", "cuddle", "d", mention); }
         [Command("poke"), Description("Poke someone!")]                                                        // [USES] nekos.life => poke
         public async Task Poke(CommandContext ctx, string mention) { await Tools.DoActionCommand(ctx, "poke", "poke", "ed", mention); }
         [Command("tickle"), Description("Tickle someone!")]                                                        // [USES] nekos.life => poke
