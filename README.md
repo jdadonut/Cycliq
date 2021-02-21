@@ -42,7 +42,7 @@ cq!show
   default command (will run if nothing specified)
   - `nsfw`
   requires NSFW channel
-- holo
+- `holo`
 aliases: hololive, vtuber, vtube, vtb
   - `ero`
   aliases: erotic, requires NSFW channel
