@@ -69,7 +69,28 @@ namespace Cycliq
 
         }
 
-
+        [Command("bulk")]
+        public async Task Bulk(CommandContext ctx, [RemainingText]string command)
+        {
+            string[] commands = command.Split("\n");
+            if (commands.Length > 50)
+                Array.Resize(ref commands, 50);
+            foreach (var i in commands)
+            {
+                string commandargs;
+                if (i != null && i.Trim() != "" && !i.StartsWith("bulk"))
+                    await ctx.CommandsNext.ExecuteCommandAsync(
+                        ctx.CommandsNext.CreateFakeContext(
+                            ctx.Member,
+                            ctx.Channel,
+                            i,
+                            ctx.Prefix,
+                            ctx.CommandsNext.FindCommand(i,out commandargs),
+                            commandargs
+                        ));
+            }
+        }
     }
+    
     
 }

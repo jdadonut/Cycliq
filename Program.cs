@@ -7,19 +7,25 @@ using DSharpPlus;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
+using DSharpPlus.VoiceNext;
+using DSharpPlus.Lavalink;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using MongoDB.Driver;
+#pragma warning disable 1998
+
 namespace Cycliq
 {
-    internal class Program
+    public class Program
     {
-        private CancellationTokenSource __ctoken { get; set; }
-        private IConfigurationRoot      __config;
-        private DiscordClient           __discord;
-        private CommandsNextExtension      __commands;
-        private InteractivityExtension     __interactivity;
+        public CancellationTokenSource __ctoken { get; set; }
+        public IConfigurationRoot      __config;
+        public DiscordClient           __discord;
+        public CommandsNextExtension   __commands;
+        public InteractivityExtension  __interactivity;
+        public VoiceNextExtension      __voice;
+        public LavalinkExtension       __lavalink;
 
         static async Task Main(string[] args) => await new Program().InitBot(args);
         async Task InitBot(string[] args)
@@ -47,7 +53,8 @@ namespace Cycliq
 
 
             __interactivity = __discord.UseInteractivity();
-
+            __voice = __discord.UseVoiceNext();
+            __lavalink = __discord.UseLavalink();
             var deps = BuildDeps();
             __commands = __discord.UseCommandsNext(new CommandsNextConfiguration
             {
@@ -86,6 +93,7 @@ namespace Cycliq
                 .AddSingleton(__config)
                 .AddSingleton<HttpClient>(new HttpClient())
                 .AddSingleton<MongoClient>(new MongoClient(__config.GetValue<string>("mongo:url")))
+                .AddSingleton(__voice)
                 .AddSingleton(__discord);
             return deps.BuildServiceProvider();
         }

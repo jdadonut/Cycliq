@@ -9,6 +9,9 @@ using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.IO;
+#pragma warning disable 1998
+
 public static class Tools
 {
     public static string NekosLife = "https://nekos.life/api/v2/";
@@ -82,6 +85,46 @@ public static class Tools
             .WithDescription($"<@!{ctx.Message.Author.Id}> {message}!");
         await ctx.RespondAsync(embed: emb);
 
+    }
+    public static class Voice
+    {
+        public static async Task<bool> IsUserInVoiceChannel(CommandContext ctx)
+        {
+            return !(ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null);
+        }
+    }
+    public static class Video
+    {
+        public static async Task<bool> IsValid(string link)
+        {
+            return (Youtube.IsValid(link));
+        }
+        /*
+        public static async Task<Stream>? Determine(string link)
+        {
+            if (Youtube.IsValid(link))
+                return await Youtube.GetStream(link);
+            else
+                return null;
+        }*/
+        public static class Youtube
+        {
+            public static bool IsValid(string link)
+            {
+#pragma warning disable 1009
+                Regex valid = new Regex(@"(?:https?:\/\/)?(?:www\.)?youtu(?:\.be\/|be.com\/\S*(?:watch|embed)(?:(?:(?=\/[^&\s\?]+(?!\S))\/)|(?:\S*v=|v\/)))([^&\s\?]+)");
+                return valid.IsMatch(link);
+            }
+            /*
+            public static async Task<Stream> GetStream(string link )
+
+            {
+               return new Stream()
+            }
+
+            public static GetVideoId
+            */
+        }
     }
 
 
