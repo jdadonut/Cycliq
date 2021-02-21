@@ -81,18 +81,25 @@ namespace Cycliq
         // ! ONE-OFF COMMANDS BELOW
         [Command("futa"), RequireNsfw, Aliases("futanari"), Description("nsfw futanari pictures")]               // [USES] nekos.life => futanari
         public async Task Futa(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "futanari"); }
+        
         [Command("smallboobs"), RequireNsfw, Aliases("flat", "smalltits"), Description("nsfw flat pictures")]    // [USES] nekos.life => smallboobs
         public async Task Flat(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "smallboobs"); }
+        
         [Command("femboy"), RequireNsfw, Aliases("trap"), Description("nsfw femboy pictures")]                   // [USES] nekos.life => trap
         public async Task Femboy(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "trap"); }
+        
         [Command("goose"), Description("goose pictures")]                                                        // [USES] nekos.life => goose
         public async Task Goose(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "goose"); }
+       
         [Command("boobs"), RequireNsfw, Aliases("tits", "honkers"), Description("nsfw boobs pictures")]          // [USES] nekos.life => boobs
         public async Task Boobs(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "boobs"); }
+        
         [Command("blowjob"), RequireNsfw, Description("nsfw blowjob pictures")]                                  // [USES] nekos.life => blowjob, bj
         public async Task Blowjob(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "bj"); }
+        
         [Command("cat"), Description("meow!")]                                                                  // [USES] nekos.life => meow
         public async Task Meow(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "meow"); }
+        
         [Command("lizard"), Description("lizard!")]                                                             // [USES] nekos.life => lizard
         public async Task Lizard(CommandContext ctx) { await Tools.DoNekosLifeCommand(ctx, "lizard"); }
 

@@ -58,7 +58,7 @@ public static class Tools
     {
         await ctx.TriggerTypingAsync();
         DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-        emb.WithImageUrl(await GetNekosLifeEndpoint(ctx, "blowjob"));
+        emb.WithImageUrl(await GetNekosLifeEndpoint(ctx, endpoint));
         await ctx.RespondAsync(embed: emb);
     }
     public static async Task DoActionCommand(CommandContext ctx, string endpoint, string action, string append, string mention)
