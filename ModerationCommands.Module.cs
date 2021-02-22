@@ -4,9 +4,13 @@ using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using System;
 using System.Threading.Tasks;
+using System.Collections;
 using System.Text.RegularExpressions;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Cycliq
 {
     class ModerationCommands : BaseCommandModule
@@ -56,6 +60,41 @@ namespace Cycliq
                 catch (Exception e) { Console.WriteLine($"Deleting message with ID {discordMessage.Id} failed. Reason: {e.Message}"); }
 
             }
+        [Command("snipe"), Description("snipes messages deleted in the past 30 seconds"), RequireUserPermissions(DSharpPlus.Permissions.ManageMessages)]
+        public async Task Snipe(CommandContext ctx)
+        {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Run(async () =>
+            {
+                await ctx.TriggerTypingAsync();
+
+                Dictionary<ulong, DiscordMessage>? assumed = ctx.Services.GetService<SnipeManager>().FindMessagesByServer(ctx.Guild.Id);
+                if (assumed == null || assumed.Count == 0)
+                {
+                    ctx.RespondAsync("No Deleted Messages in the past 30 seconds.");
+                    return;
+                }
+                DiscordEmbedBuilder embed = new DiscordEmbedBuilder();
+                foreach (DiscordMessage msg in assumed.Values)
+                    try
+                    {
+                        embed
+                        .AddField($"{msg.Author.Username}#{msg.Author.Discriminator} (deleted) in #{msg.Channel.Name}", msg.Content.Trim().Remove(int.Parse($"{(msg.Content.Trim().Length < 1950 ? msg.Content.Trim().Length-1 : 1949)}")) + $"{(msg.Attachments.Count != 0 ? "(+ 📎)" : "")}");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[Cycliq] | [ERR] => Encountered Exception {e.Message} while running cq!snipe");
+                        ctx.RespondAsync(embed: embed);
+                        return;
+                    }
+                ctx.RespondAsync(embed);
+
+            });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+
+        }
+
         }
     }
 

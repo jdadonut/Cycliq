@@ -74,8 +74,10 @@ namespace Cycliq
                 __commands.RegisterCommands(t);
             }
             Console.WriteLine($"[Cycliq] | Loaded {typeList.Count()} modules.");
+            __discord.MessageDeleted += __discord.GetCommandsNext().Services.GetService<SnipeManager>().MessageDeleted;
             RunAsync(args).Wait();
         }
+
         async Task RunAsync(string[] args)
         {
             Console.WriteLine("[Cycliq] | Connecting...");
@@ -94,6 +96,7 @@ namespace Cycliq
                 .AddSingleton<HttpClient>(new HttpClient())
                 .AddSingleton<MongoClient>(new MongoClient(__config.GetValue<string>("mongo:url")))
                 .AddSingleton(__voice)
+                .AddSingleton<SnipeManager>(new SnipeManager())
                 .AddSingleton(__discord);
             return deps.BuildServiceProvider();
         }
