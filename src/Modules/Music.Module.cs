@@ -10,8 +10,8 @@ using DSharpPlus.VoiceNext;
 using DSharpPlus.VoiceNext.Codec;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using System.Net.Http;
-using Newtonsoft.Json;
+using Cycliq.Modules;
+
 namespace Cycliq
 {
     [Group("music")]
@@ -20,25 +20,17 @@ namespace Cycliq
         [Command("play"), Description("play music!"), RequireUserPermissions(Permissions.UseVoice), RequireBotPermissions(Permissions.UseVoice)]
         public async Task Play(CommandContext ctx, string video)
         {
-            if (await Join(ctx))
-            {
-                if (!await Tools.Video.IsValid(video))
-                    return;
-                VoiceNextConnection con = await ctx.Member.VoiceState.Channel.ConnectAsync();
-                VoiceTransmitSink sink = con.GetTransmitSink();
-            }
+            
         }
         [Command("join"), Description("join voice chat!"), RequireUserPermissions(Permissions.UseVoice), RequireBotPermissions(Permissions.UseVoice)]
 
-        public async Task<bool> Join(CommandContext ctx)
+        public async Task Join(CommandContext ctx)
         {
-            if (!await Tools.Voice.IsUserInVoiceChannel(ctx))
-            {
-                await ctx.RespondAsync("You need to be in a voice channel for that!");
-                return false;
-            }
-            return false;
             
         }
+        internal class internals {
+
+        }
     }
+    
 }

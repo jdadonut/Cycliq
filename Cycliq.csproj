@@ -18,9 +18,13 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0-preview.1.21102.12" />
     <PackageReference Include="MongoDB.Driver" Version="2.12.0-beta1" />
     <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Net.Http.Json" Version="6.0.0-preview.1.21102.12" />
   </ItemGroup>
 <ItemGroup>
   <None Update="config.json" CopyToOutputDirectory="PreserveNewest" />
-  <None Update="config.example..json" CopyToOutputDirectory="PreserveNewest" />
+  <None Update="config.example.json" CopyToOutputDirectory="PreserveNewest" />
+</ItemGroup>
+<ItemGroup>
+  <Folder Include="obj\" />
 </ItemGroup>
 </Project>

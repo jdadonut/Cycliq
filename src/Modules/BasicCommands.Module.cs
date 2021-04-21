@@ -27,12 +27,22 @@ namespace Cycliq
         public async Task Eval(CommandContext ctx)
         {
             await ctx.TriggerTypingAsync();
-            await ctx.RespondAsync("lol no");
+            await ctx.RespondAsync("i-");
+            await ctx.TriggerTypingAsync();
+            await Task.Delay(1000);
+            await ctx.RespondAsync("you're kidding me, right?");
+            await ctx.TriggerTypingAsync();
+            await Task.Delay(1600);
+            await ctx.RespondAsync("like did you actually think that would work?");
+            await Task.Delay(1100);
+            await ctx.RespondAsync("stupidest thing ive seen someone do all week");
         }
         [Command("bulk")]
-
+        [RequireGuild]
         public async Task Bulk(CommandContext ctx, [RemainingText] string command)
         {
+            if (command.Length == 0)
+                return;
             string[] commands = command.Split("\n");
             if (commands.Length > 50)
                 Array.Resize(ref commands, 50);

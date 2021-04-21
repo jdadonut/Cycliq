@@ -31,14 +31,27 @@ public static class Tools
         if (((int)res.StatusCode) != 200)
             return "";
         else
-            return ((Newtonsoft.Json.Linq.JObject)JsonConvert.DeserializeObject(await res.Content.ReadAsStringAsync())).GetValue("url").ToString();
+            return await DecodeNekosLifeApiResponse(res);
+    }
+    private static async Task<string> DecodeNekosLifeApiResponse(HttpResponseMessage res)
+    {
+        try
+        {
+            var a = ((Newtonsoft.Json.Linq.JObject)
+            JsonConvert.DeserializeObject(await res.Content.ReadAsStringAsync()))
+            .GetValue("url").ToString();
+            return a;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Nekos.Life endpoint errored. Error: {e.Message}, Response: " + await res.Content.ReadAsStringAsync());
+            return "";
+        }
     }
     public static async Task<string> GetMention(CommandContext ctx, string mention, string message = "Please send a valid mention.")
     {
         await ctx.RespondAsync($"{mention} isn't a valid tag! {message}");
-        var mes = await ctx.Client.GetInteractivity().WaitForMessageAsync(
-            c => c.Author.Id == ctx.Message.Author.Id,
-            TimeSpan.FromSeconds(15));
+        InteractivityResult<DiscordMessage> mes = await GetMessageWithMention(ctx);
         if (mes.Result.Content.ToLower() == "cancel")
         {
             await ctx.RespondAsync("Command Cancelled.");
@@ -56,6 +69,12 @@ public static class Tools
         }
 
 
+    }
+    private static async Task<InteractivityResult<DiscordMessage>> GetMessageWithMention(CommandContext ctx)
+    {
+        return await ctx.Client.GetInteractivity().WaitForMessageAsync(
+            c => c.Author.Id == ctx.Message.Author.Id,
+            TimeSpan.FromSeconds(15));
     }
     public static async Task DoNekosLifeCommand(CommandContext ctx, string endpoint)
     {
