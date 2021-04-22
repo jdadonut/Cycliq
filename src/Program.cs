@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using MongoDB.Driver;
 using Cycliq.Modules;
+using Cycliq.Generators;
 #pragma warning disable 1998
 
 namespace Cycliq
@@ -60,6 +61,7 @@ namespace Cycliq
                 //EnableDms = false,
 
             });
+            __commands.SetHelpFormatter<HelpGenerator>();
             LoadCommands();
         }
 
@@ -72,7 +74,7 @@ namespace Cycliq
             var typeList = types as Type[] ?? types.ToArray();
             foreach (var t in typeList)
             {
-                Console.WriteLine($"[Cycliq] | Module {t.Name} Loaded...");
+                Console.WriteLine($"[Cycliq] | Module {t.Namespace}.{t.Name} Loaded...");
                 __commands.RegisterCommands(t);
             }
             Console.WriteLine($"[Cycliq] | Loaded {typeList.Count()} modules.");

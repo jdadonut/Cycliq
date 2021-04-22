@@ -14,40 +14,7 @@ using System.IO;
 
 public static class Tools
 {
-    public static string NekosLife = "https://nekos.life/api/v2/";
-    public static bool IsMention(string mention)
-    {
-        return new Regex("(<@|<@!)[0-9]{1,30}>").IsMatch(mention);
-    }
-    public static async Task<string> GetNekosLifeEndpoint(CommandContext ctx, string s, bool img = true)
-    {
-        string url = NekosLife;
-        if (img)
-            url += "img/";
-        url += s;
-        IServiceProvider deps = ctx.Services;
-        HttpClient client = deps.GetService<HttpClient>();
-        HttpResponseMessage res =  await client.GetAsync(url);
-        if (((int)res.StatusCode) != 200)
-            return "";
-        else
-            return await DecodeNekosLifeApiResponse(res);
-    }
-    private static async Task<string> DecodeNekosLifeApiResponse(HttpResponseMessage res)
-    {
-        try
-        {
-            var a = ((Newtonsoft.Json.Linq.JObject)
-            JsonConvert.DeserializeObject(await res.Content.ReadAsStringAsync()))
-            .GetValue("url").ToString();
-            return a;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Nekos.Life endpoint errored. Error: {e.Message}, Response: " + await res.Content.ReadAsStringAsync());
-            return "";
-        }
-    }
+    public static bool IsMention(string mention) { return new Regex("(<@|<@!)[0-9]{1,30}>").IsMatch(mention); }
     public static async Task<string> GetMention(CommandContext ctx, string mention, string message = "Please send a valid mention.")
     {
         await ctx.RespondAsync($"{mention} isn't a valid tag! {message}");
@@ -76,35 +43,10 @@ public static class Tools
             c => c.Author.Id == ctx.Message.Author.Id,
             TimeSpan.FromSeconds(15));
     }
-    public static async Task DoNekosLifeCommand(CommandContext ctx, string endpoint)
-    {
-        await ctx.TriggerTypingAsync();
-        DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-        emb.WithImageUrl(await GetNekosLifeEndpoint(ctx, endpoint));
-        await ctx.RespondAsync(embed: emb);
+    public static DiscordColor GetColor(string hex){
+        return new DiscordColor(hex);
     }
-    public static async Task DoActionCommand(CommandContext ctx, string endpoint, string action, string append, string mention)
-    {
-        await ctx.TriggerTypingAsync();
-        if (!Tools.IsMention(mention))
-            mention = await Tools.GetMention(ctx, mention, $"Please mention the user you want to {action}!");
-        if (mention == ctx.Message.Author.Id.ToString())
-            return;
-        DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-        emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, endpoint))
-            .WithDescription($"<@!{ctx.Message.Author.Id}> {action}{append} {mention}");
-        await ctx.RespondAsync(embed: emb);
 
-    }
-    public static async Task DoSelfActionCommand(CommandContext ctx, string endpoint, string message)
-    {
-        await ctx.TriggerTypingAsync();
-        DiscordEmbedBuilder emb = new DiscordEmbedBuilder();
-        emb.WithImageUrl(await Tools.GetNekosLifeEndpoint(ctx, endpoint))
-            .WithDescription($"<@!{ctx.Message.Author.Id}> {message}!");
-        await ctx.RespondAsync(embed: emb);
-
-    }
     public static class Voice
     {
         public static async Task<bool> IsUserInVoiceChannel(CommandContext ctx)
@@ -146,5 +88,24 @@ public static class Tools
         }
     }
 
+    public static class Music {
+        public static string DetermineAudioSource(CommandContext ctx, string video){
+            if (video.Length == 0 && ctx.Message.Attachments.Count == 0) {
+                return "none";
+            }
+            if (video.Length == 0){
+                return "attachment";
+            }
+            if (Video.Youtube.IsValid(video)) {
+                return "youtube-link";
+            }
+            return "none";
 
+
+        }
+    }
+
+}
+public static class Colors {
+    static public string Youtube = "#FF0000";
 }
