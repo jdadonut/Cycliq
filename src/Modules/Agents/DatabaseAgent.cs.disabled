@@ -1,9 +1,16 @@
 using Microsoft.Data.Sqlite;
+using System.Collections.Generic;
 
 namespace Cycliq.Agents
 {
-    class DatabaseAgent
+    class DatabaseAgent : SqliteConnection
     {
+        private Dictionary<string, object> Cache = new Dictionary<string, object>();
+
+        public DatabaseAgent (string Source) : base(Source)
+        {
+
+        }
 
     }
 }

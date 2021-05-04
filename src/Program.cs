@@ -9,11 +9,13 @@ using DSharpPlus.Interactivity;
 using DSharpPlus.Interactivity.Extensions;
 using DSharpPlus.VoiceNext;
 using DSharpPlus.Lavalink;
+using DSharpPlus.SlashCommands;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using MongoDB.Driver;
 using Cycliq.Modules;
+
 //using Cycliq.Generators;
 #pragma warning disable 1998
 

@@ -4,6 +4,14 @@ namespace Cycliq.Stores
 {
     class GuildSettingsStore
     {
-        public GuildSettingsStore() { }
+        private DatabaseAgent GuildSettingsDatabase;
+        public GuildSettingsStore(DatabaseAgent GuildSettingsDatabase) 
+        { 
+            this.GuildSettingsDatabase = GuildSettingsDatabase;
+        }
+        public static void OnNewGuild(ulong guildid)
+        {
+            
+        }
     }
 }
