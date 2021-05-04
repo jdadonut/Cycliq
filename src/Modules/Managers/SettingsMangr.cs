@@ -1,3 +1,3 @@
 
 
-namespace Cycliq.Entities
+namespace Cycliq.Entities{}
