@@ -1,15 +1,10 @@
 ﻿using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity;
 using System;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using DSharpPlus.Interactivity.Extensions;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.IO;
 #pragma warning disable 1998
 
 public static class Tools

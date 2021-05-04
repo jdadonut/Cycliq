@@ -9,5 +9,7 @@
         "obj": true,
         "bin": true
     },
-    "explorerExclude.backup": null
+    "files.associations": {
+      "*.cs.disabled": "csharp"
+  }
 }

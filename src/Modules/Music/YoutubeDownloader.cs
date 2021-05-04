@@ -1,7 +1,5 @@
 using System.IO;
 using System.Threading.Tasks;
-using VideoLibrary;
-using NAudio;
 using DSharpPlus.CommandsNext;
 namespace Cycliq.Music.Youtube {
     class YoutubeMusic {

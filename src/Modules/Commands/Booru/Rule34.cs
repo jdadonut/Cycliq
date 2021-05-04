@@ -1,13 +1,9 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
 using System;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Net.Http;
-using Newtonsoft.Json;
-using DSharpPlus;
 using Microsoft.Extensions.DependencyInjection;
 using System.Xml;
 using Cycliq.Agents;

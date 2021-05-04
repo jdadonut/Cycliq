@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace DSharpPlus.CommandsNext.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Method ^ AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class CategoryAttribute : CheckBaseAttribute
     {
         public string Category { get; private set; }

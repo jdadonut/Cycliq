@@ -1,19 +1,14 @@
 using DSharpPlus.CommandsNext;
-using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
 using System;
 using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using DSharpPlus.Interactivity.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http;
 using Newtonsoft.Json;
-using System.IO;
 
 namespace Cycliq.Agents {
     public static class NekosLifeAgent {
-        public static readonly string Endpoint = "https://nekos.life/api/v2";
+        public static readonly string Endpoint = "https://nekos.life/api/v2/";
         public static async Task<string> GetNekosLifeEndpoint(CommandContext ctx, string s, bool img = true)
     {
         string url = Endpoint;

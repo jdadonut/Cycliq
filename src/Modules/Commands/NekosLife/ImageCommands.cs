@@ -1,28 +1,29 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
-using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
-using System;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using System.Net.Http;
-using Newtonsoft.Json;
-using DSharpPlus;
-using Microsoft.Extensions.DependencyInjection;
-using System.Xml;
 using Cycliq.Agents;
 namespace Cycliq.Commands.NekosLife
 {
+    [Category("Nekos.life", "Images"),
+    Usage("{prefix}{command}"), Description("Get Nekos.Life images")]
     class ShowCommands : BaseCommandModule
     {
-        [Group("feet")]
+        [Group("feet")
+        ]
         internal class ShowFeet : BaseCommandModule
         {
-            [Command("ero"), Description("erotic feet image"), RequireNsfw, Aliases("erotic")]                  // [USES] nekos.life => feet
+            [Command("ero"), 
+            Description("erotic feet image"), 
+            RequireNsfw, Aliases("erotic"), 
+            GroupCommand, ]                  // [USES] nekos.life => feet
             public async Task FeetSFW(CommandContext ctx) { await NekosLifeAgent.DoNekosLifeCommand(ctx, "feet"); } 
-            [Command("sfw"), Description("sfw feet image"), GroupCommand]                                       // [USES] nekos.life => erofeet
-            public async Task FeetERO(CommandContext ctx) { await NekosLifeAgent.DoNekosLifeCommand(ctx, "erofeet"); } 
-            [Command("nsfw"), Description("nsfw feet image"), RequireNsfw]                                      // [USES] nekos.life => feetg
+            
+            [Command("nsfw"), 
+            Description("nsfw feet image"), 
+            RequireNsfw,
+            Category("Nekos.life", "Images"),
+            Usage("{prefix}feet nsfw")]                                      // [USES] nekos.life => feetg
             public async Task FeetNSFW(CommandContext ctx) { await NekosLifeAgent.DoNekosLifeCommand(ctx, "feetg"); } 
         }
         [Group("holo"), Aliases("hololive", "vtuber", "vtube", "vtb")]
@@ -46,10 +47,8 @@ namespace Cycliq.Commands.NekosLife
         [Group("animalgirl"), Aliases("kemonomimi", "kemo")]
         internal class ShowKemonomimi : BaseCommandModule
         {
-            [Command("ero"), Description("erotic kemonomimi image"), RequireNsfw, Aliases("erotic")]             // [USES] nekos.life => erok, erokemo
+            [Command("ero"), Description("erotic kemonomimi image"), RequireNsfw, Aliases("erotic"), GroupCommand]             // [USES] nekos.life => erok, erokemo
             public async Task HoloERO(CommandContext ctx) { await NekosLifeAgent.DoNekosLifeCommand(ctx, "erok"); }
-            [Command("sfw"), Description("sfw kemonomimi image"), GroupCommand]                                  // [USES] nekos.life => kemo, kemonomimi
-            public async Task HoloSFW(CommandContext ctx) { await NekosLifeAgent.DoNekosLifeCommand(ctx, "kemonomimi"); }
             [Command("nsfw"), Description("nsfw kemonomimi image"), Aliases("lewd", "ns", "porn"), RequireNsfw]  // [USES] nekos.life => lewdkemo, lewdk
             public async Task HoloNSFW(CommandContext ctx) { await NekosLifeAgent.DoNekosLifeCommand(ctx, "lewdkemo"); }
         }

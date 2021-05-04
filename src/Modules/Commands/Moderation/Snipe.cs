@@ -1,13 +1,8 @@
 using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
 using System;
 using System.Threading.Tasks;
-using System.Collections;
-using System.Text.RegularExpressions;
-using System.Net.Http;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +12,7 @@ namespace Cycliq.Moderation
 {
     public class Snipe : BaseCommandModule
     {
-        [Command("snipe"), Description("snipes messages deleted in the past 30 seconds"), RequireUserPermissions(DSharpPlus.Permissions.ManageMessages)]
+        [Command("snipe"), Description("snipes messages deleted in the past 30 seconds"), /*RequireUserPermissions(DSharpPlus.Permissions.ManageMessages)*/]
         [RequireGuild]
         public async Task SnipeCommand(CommandContext ctx)
         {

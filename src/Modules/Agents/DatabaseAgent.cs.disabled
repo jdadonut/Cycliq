@@ -1,0 +1,9 @@
+using Microsoft.Data.Sqlite;
+
+namespace Cycliq.Agents
+{
+    class DatabaseAgent
+    {
+
+    }
+}

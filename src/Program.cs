@@ -14,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using System.Net.Http;
 using MongoDB.Driver;
 using Cycliq.Modules;
-using Cycliq.Generators;
+//using Cycliq.Generators;
 #pragma warning disable 1998
 
 namespace Cycliq
@@ -61,7 +61,7 @@ namespace Cycliq
                 //EnableDms = false,
 
             });
-            __commands.SetHelpFormatter<HelpGenerator>();
+            //__commands.SetHelpFormatter<HelpGenerator>();
             LoadCommands();
         }
 

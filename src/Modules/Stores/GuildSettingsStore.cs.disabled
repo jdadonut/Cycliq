@@ -1,0 +1,9 @@
+using Cycliq.Agents;
+
+namespace Cycliq.Stores
+{
+    class GuildSettingsStore
+    {
+        public GuildSettingsStore() { }
+    }
+}

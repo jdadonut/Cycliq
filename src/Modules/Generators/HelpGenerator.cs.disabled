@@ -7,19 +7,21 @@ using System.Collections.Generic;
 using Cycliq.Converters;
 using System.Linq;
 using DSharpPlus.CommandsNext.Entities;
-
+using System.Text;
 namespace Cycliq.Generators
 {
     public class HelpGenerator : BaseHelpFormatter
     {
-        protected DiscordEmbedBuilder _embed;
+        protected StringBuilder _embed;
         public HelpGenerator(CommandContext context) : base(context)
         {
-            _embed = new DiscordEmbedBuilder();
+            Console.WriteLine("[Cycliq] | Help Module Initialized");
+            _embed = new StringBuilder();
 
         }
         public override BaseHelpFormatter WithCommand(Command command)
         {
+            Console.WriteLine("[Cycliq] | WithCommand started");
             string category;
             string usage;
 
@@ -31,17 +33,17 @@ namespace Cycliq.Generators
 
 
             _embed
-                .WithTitle(command.Name)
-                .WithDescription(command.Description)
-                .AddField("Category", category, true)
-                .AddField("Usage", usage, true);
+                .AppendLine(command.Name +  $": {command.Description}\nCategory: {category}\nUsage: {usage}");
+            Console.WriteLine("[Cycliq] | WithCommand ended");
             return this;
         }
 
-        public override BaseHelpFormatter WithSubcommands(IEnumerable<Command> subcommands)
+        public override BaseHelpFormatter WithSubcommands(IEnumerable<Command> subcommands) : base(subcommands) {}
         {
+            Console.WriteLine("[Cycliq] | WithSubcommands started");
             foreach (Command command in subcommands)
             {
+                Console.WriteLine("[Cycliq] | WithSubcommands: " + command.Name);
                 string category;
                 string usage;
 
@@ -50,16 +52,17 @@ namespace Cycliq.Generators
                 UsageAttribute usageAttribute = attributes.OfType<UsageAttribute>().FirstOrDefault();
                 category = $"{categoryAttribute.Category}::{categoryAttribute.Subcategory}";
                 usage = usageAttribute.Usage;
-
+                
                 _embed
-                    .AddField(command.Name, $"{command.Description}\nCategory: {category}\nUsage: {usage}");
+                    .AppendLine(command.Name + $": {command.Description}\nCategory: {category}\nUsage: {usage}");
             }
+            Console.WriteLine("[Cycliq] | WithSubCommands ended");
             return this;
         }
         public override CommandHelpMessage Build()
         {
-            _embed.Color = DiscordColor.SpringGreen;
-            return new CommandHelpMessage(embed:_embed);
+            Console.WriteLine("[Cycliq] | Help Module Build() called");
+            return new CommandHelpMessage(content:_embed.ToString());
         }
 
     }

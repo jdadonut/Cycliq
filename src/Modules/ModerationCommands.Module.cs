@@ -1,15 +1,8 @@
 ﻿using DSharpPlus.CommandsNext;
 using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
-using DSharpPlus.Interactivity;
 using System;
 using System.Threading.Tasks;
-using System.Collections;
-using System.Text.RegularExpressions;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 #pragma warning disable 
 namespace Cycliq
 {
